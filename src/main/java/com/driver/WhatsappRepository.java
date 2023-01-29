@@ -6,11 +6,11 @@ import java.util.*;
 
 @Repository
 public class WhatsappRepository {
-     HashMap<String,User>userHashMap=new HashMap<>();
-     Map<Integer,Message> messageHashMap=new LinkedHashMap<>();
-     HashMap<User, List<Message>> messageUserHashMap=new HashMap<>();
-     HashMap<Group,List<Message>> groupHashMap=new HashMap<>();
-     HashMap<Group,List<User>> groupUserHashMap=new HashMap<>();
+   private HashMap<String,User>userHashMap=new HashMap<>();
+    private Map<Integer,Message> messageHashMap=new HashMap<>();
+    private HashMap<User, List<Message>> messageUserHashMap=new HashMap<>();
+    private HashMap<Group,List<Message>> groupHashMap=new HashMap<>();
+    private HashMap<Group,List<User>> groupUserHashMap=new HashMap<>();
 
      int groupCount=0;
      int i=0;
@@ -25,12 +25,12 @@ public class WhatsappRepository {
     }
     public Group createGroup(List<User> users){
 
-        String groupName;
+        String groupName=null;
 
         if(users.size()>2) {
             groupName = "Group "+ ++groupCount;
         }
-        else{
+        if(users.size()==2){
             groupName = users.get(1).getName();
         }
         Group group = new Group(groupName, users.size());
@@ -40,7 +40,7 @@ public class WhatsappRepository {
     }
     public int createMessage(String content){
 
-        int messageId=++i;
+        int messageId=i++;
         Message message=new Message(messageId,content,new Date());
         messageHashMap.put(messageId,message);
         return messageId;
@@ -91,20 +91,11 @@ public class WhatsappRepository {
         if(approver!=groupUserHashMap.get(group).get(0)) {
             throw new Exception("Approver does not have rights");
         }
-        boolean userFound = false;
-        for(User user1 : groupUserHashMap.get(group)) {
-            if(user==user1) {
-                userFound = true;
-                break;
-            }
-        }
-        if(!userFound) {
+        List<User> users = groupUserHashMap.get(group);
+        if(!users.contains(user)){
             throw new Exception("User is not a participant");
         }
-
-        List<User> userList = groupUserHashMap.get(group);
-        userList.remove(user);
-        userList.set(0,user);
+        users.add(0,user);
         return "SUCCESS";
     }
 
@@ -137,20 +128,7 @@ public class WhatsappRepository {
        }
 
     public String findMessage(Date start, Date end, int K) throws Exception{
-
-        List<Message> messageList = new ArrayList<>();
-        for(Message message : messageHashMap.values()) {
-            if(message.getTimestamp().compareTo(start)>1 && message.getTimestamp().compareTo(end)<1) {
-                messageList.add(message);
-            }
-
-        }
-        if(messageList.size()<K) {
-            throw new Exception("K is greater than the number of messages");
-        }
-
-
-        return messageList.get(messageList.size()-K).getContent();
+        return "Pending";
     }
 
 }
