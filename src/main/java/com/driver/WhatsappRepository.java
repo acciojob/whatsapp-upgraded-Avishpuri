@@ -51,14 +51,9 @@ public class WhatsappRepository {
         if(!groupUserHashMap.containsKey(group)){
             throw new Exception("Group does not exist");
         }
-        boolean senderFound=false;
-        for(User user:groupUserHashMap.get(group)){
-            if(user==sender){
-                senderFound=true;
-                break;
-            }
-        }
-        if(!senderFound){
+        List<User>users=groupUserHashMap.get(group);
+
+        if(!users.contains(sender)){
             throw new Exception("You are not allowed to send message");
         }
         if(groupHashMap.containsKey(group)) {
