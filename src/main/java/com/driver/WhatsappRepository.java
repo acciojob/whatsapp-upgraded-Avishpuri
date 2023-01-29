@@ -138,10 +138,19 @@ public class WhatsappRepository {
 
     public String findMessage(Date start, Date end, int K) throws Exception{
 
-        if(K==0){
-            throw new Exception();
+        List<Message> messageList = new ArrayList<>();
+        for(Message message : messageHashMap.values()) {
+            if(message.getTimestamp().compareTo(start)>1 && message.getTimestamp().compareTo(end)<1) {
+                messageList.add(message);
+            }
+
         }
-        return "pending";
+        if(messageList.size()<K) {
+            throw new Exception("K is greater than the number of messages");
+        }
+
+
+        return messageList.get(messageList.size()-K).getContent();
     }
 
 }
