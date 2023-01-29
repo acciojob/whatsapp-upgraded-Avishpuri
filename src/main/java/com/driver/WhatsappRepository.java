@@ -6,8 +6,8 @@ import java.util.*;
 
 @Repository
 public class WhatsappRepository {
-    private HashMap<String,User> userHashMap;
-    private HashMap<Integer,Message> messageHashMap;
+    private HashMap<String,User>userHashMap;
+    private LinkedHashMap<Integer,Message> messageHashMap;
     private HashMap<User, List<Message>> messageUserHashMap;
     private HashMap<Group,List<Message>> groupHashMap;
     private HashMap<Group,List<User>> groupUserHashMap;
@@ -43,11 +43,12 @@ public class WhatsappRepository {
         //If createGroup is called for these userLists in the same order, their group names would be "Group 1", "Evan", and "Group 2" respectively.
 
         String groupName = null;
-        if(users.size()==2){
-            groupName = users.get(1).getName();
-        }
-       else if(users.size()>2) {
+
+        if(users.size()>2) {
             groupName = "Group "+ ++groupCount;
+        }
+        else{
+            groupName = users.get(1).getName();
         }
         Group group = new Group(groupName, users.size());
         groupUserHashMap.put(group, users);
