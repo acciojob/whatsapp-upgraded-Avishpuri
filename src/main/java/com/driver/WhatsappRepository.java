@@ -14,7 +14,7 @@ public class WhatsappRepository {
     private HashMap<User, List<Message>> messageUserHashMap;
     private HashMap<Group,List<Message>> groupHashMap;
     private HashMap<Group,List<User>> groupUserHashMap;
-    private int groupCount=0;
+
 
     public WhatsappRepository() {
         this.userHashMap = new HashMap<>();
@@ -23,7 +23,8 @@ public class WhatsappRepository {
         this.groupHashMap = new HashMap<>();
         this.groupUserHashMap = new HashMap<>();
     }
-
+    private int groupCount=0;
+    private int i=0;
     public String createUser(String name,String mobile) throws Exception{
         //If the mobile number exists in database, throw "User already exists" exception
         //Otherwise, create the user and return "SUCCESS"
@@ -45,11 +46,11 @@ public class WhatsappRepository {
         //If createGroup is called for these userLists in the same order, their group names would be "Group 1", "Evan", and "Group 2" respectively.
 
         String groupName = null;
-        if(users.size()>2) {
-            groupName = "Group "+ ++groupCount;
-        }
-        else {
+        if(users.size()==2){
             groupName = users.get(1).getName();
+        }
+       else if(users.size()>2) {
+            groupName = "Group "+ ++groupCount;
         }
         Group group = new Group(groupName, users.size());
         groupUserHashMap.put(group, users);
@@ -59,7 +60,7 @@ public class WhatsappRepository {
     public int createMessage(String content){
         // The 'i^th' created message has message id 'i'.
         // Return the message id.
-        int messageId=1;
+        int messageId=++i;
         Message message=new Message(messageId,content,new Date());
         messageHashMap.put(messageId,message);
         return messageId;
@@ -123,7 +124,7 @@ public class WhatsappRepository {
                 break;
             }
         }
-        if(!userFound) {
+        if(userFound=false) {
             throw new Exception("User is not a participant");
         }
 
@@ -139,10 +140,37 @@ public class WhatsappRepository {
         //If user is found in a group and it is the admin, throw "Cannot remove admin" exception
         //If user is not the admin, remove the user from the group, remove all its messages from all the databases, and update relevant attributes accordingly.
         //If user is removed successfully, return (the updated number of users in the group + the updated number of messages in group + the updated number of overall messages)
-       return 0;
+        Group group =  null;
+        for(Group group1 : groupUserHashMap.keySet()) {
+            for (User user1 : groupUserHashMap.get(group1)) {
+                if(user==user1) {
+                    if(groupUserHashMap.get(group1).get(0)==user) {
+                        throw new Exception("Cannot remove admin");
+                    }
+                    group = group1;
+                    break;
+                }
+            }
+        }
+        if(group==null) {
+            throw new Exception("User not found");
+        }
+        for(Message message : messageUserHashMap.get(user)) {
+            messageHashMap.remove(message.getId());
+            groupHashMap.get(group).remove(message);
+        }
+        messageHashMap.remove(user);
+        groupUserHashMap.get(group).remove(user);
+        userHashMap.remove(user.getMobile());
+        return groupUserHashMap.get(group).size()+groupHashMap.get(group).size()+messageHashMap.size();
 
        }
 
-    public String findMessage(Date start, Date end, int K) throws Exception{return "pending";}
+    public String findMessage(Date start, Date end, int K) throws Exception{
+        // This is a bonus problem and does not contains any marks
+        // Find the Kth latest message between start and end (excluding start and end)
+        // If the number of messages between given time is less than K, throw "K is greater than the number of messages" exception
+        return "pending";
+    }
 
 }
