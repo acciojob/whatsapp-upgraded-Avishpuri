@@ -1,5 +1,6 @@
 package com.driver;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
@@ -7,7 +8,7 @@ import java.util.*;
 @Repository
 public class WhatsappRepository {
    private HashMap<String,User>userHashMap=new HashMap<>();
-    private Map<Integer,Message> messageHashMap=new HashMap<>();
+    private Map<Integer,Message> messageHashMap=new LinkedHashMap<>();
     private HashMap<User, List<Message>> messageUserHashMap=new HashMap<>();
     private HashMap<Group,List<Message>> groupHashMap=new HashMap<>();
     private HashMap<Group,List<User>> groupUserHashMap=new HashMap<>();
@@ -23,14 +24,14 @@ public class WhatsappRepository {
       userHashMap.put(mobile,user);
       return "SUCCESS";
     }
-    public Group createGroup(List<User> users){
+    public Group createGroup(@NotNull List<User> users){
 
         String groupName=null;
 
         if(users.size()>2) {
             groupName = "Group "+ ++groupCount;
         }
-        if(users.size()==2){
+        else{
             groupName = users.get(1).getName();
         }
         Group group = new Group(groupName, users.size());
