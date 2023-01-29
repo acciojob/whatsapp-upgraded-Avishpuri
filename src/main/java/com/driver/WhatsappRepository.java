@@ -34,7 +34,7 @@ public class WhatsappRepository {
         //For example: Consider userList1 = {Alex, Bob, Charlie}, userList2 = {Dan, Evan}, userList3 = {Felix, Graham, Hugh}.
         //If createGroup is called for these userLists in the same order, their group names would be "Group 1", "Evan", and "Group 2" respectively.
 
-        String groupName = "";
+        String groupName =null;
 
         if(users.size()>2) {
             groupName = "Group "+ ++groupCount;
@@ -114,7 +114,7 @@ public class WhatsappRepository {
                 break;
             }
         }
-        if(userFound=false) {
+        if(!userFound) {
             throw new Exception("User is not a participant");
         }
 
