@@ -6,23 +6,15 @@ import java.util.*;
 
 @Repository
 public class WhatsappRepository {
-    private HashMap<String,User>userHashMap;
-    private LinkedHashMap<Integer,Message> messageHashMap;
-    private HashMap<User, List<Message>> messageUserHashMap;
-    private HashMap<Group,List<Message>> groupHashMap;
-    private HashMap<Group,List<User>> groupUserHashMap;
+     HashMap<String,User>userHashMap=new HashMap<>();
+     LinkedHashMap<Integer,Message> messageHashMap=new LinkedHashMap<>();
+     HashMap<User, List<Message>> messageUserHashMap=new HashMap<>();
+     HashMap<Group,List<Message>> groupHashMap=new HashMap<>();
+     HashMap<Group,List<User>> groupUserHashMap=new HashMap<>();
 
-
-    public WhatsappRepository() {
-        this.userHashMap = new HashMap<>();
-        this.messageHashMap = new LinkedHashMap<>();
-        this.messageUserHashMap = new HashMap<>();
-        this.groupHashMap = new HashMap<>();
-        this.groupUserHashMap = new HashMap<>();
-    }
-    private int groupCount=0;
-    private int i=0;
-    public String createUser(String name,String mobile) throws Exception{
+     int groupCount=0;
+     int i=0;
+    public String addUser(String name,String mobile) throws Exception{
         //If the mobile number exists in database, throw "User already exists" exception
         //Otherwise, create the user and return "SUCCESS"
       if(userHashMap.containsKey(mobile)){
@@ -42,7 +34,7 @@ public class WhatsappRepository {
         //For example: Consider userList1 = {Alex, Bob, Charlie}, userList2 = {Dan, Evan}, userList3 = {Felix, Graham, Hugh}.
         //If createGroup is called for these userLists in the same order, their group names would be "Group 1", "Evan", and "Group 2" respectively.
 
-        String groupName = null;
+        String groupName = "";
 
         if(users.size()>2) {
             groupName = "Group "+ ++groupCount;
@@ -77,7 +69,7 @@ public class WhatsappRepository {
                 break;
             }
         }
-        if(senderFound==false){
+        if(!senderFound){
             throw new Exception("You are not allowed to send message");
         }
         if(groupHashMap.containsKey(group)) {
@@ -157,7 +149,7 @@ public class WhatsappRepository {
             messageHashMap.remove(message.getId());
             groupHashMap.get(group).remove(message);
         }
-        messageHashMap.remove(user);
+        messageUserHashMap.remove(user);
         groupUserHashMap.get(group).remove(user);
         userHashMap.remove(user.getMobile());
         return groupUserHashMap.get(group).size()+groupHashMap.get(group).size()+messageHashMap.size();
