@@ -2,10 +2,7 @@ package com.driver;
 
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class WhatsappRepository {
@@ -18,7 +15,7 @@ public class WhatsappRepository {
 
     public WhatsappRepository() {
         this.userHashMap = new HashMap<>();
-        this.messageHashMap = new HashMap<>();
+        this.messageHashMap = new LinkedHashMap<>();
         this.messageUserHashMap = new HashMap<>();
         this.groupHashMap = new HashMap<>();
         this.groupUserHashMap = new HashMap<>();
