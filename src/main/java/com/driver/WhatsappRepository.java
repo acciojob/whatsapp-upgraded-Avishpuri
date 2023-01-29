@@ -16,12 +16,12 @@ public class WhatsappRepository {
     private HashMap<Group,List<User>> groupUserHashMap;
     private int groupCount=0;
 
-    public WhatsappRepository(HashMap<String, User> userHashMap, HashMap<Integer, Message> messageHashMapHashMap, HashMap<User, List<Message>> messageUserHashMap, HashMap<Group, List<Message>> groupHashMap, HashMap<Group, List<User>> groupUserHashMap) {
-        this.userHashMap = userHashMap;
-        this.messageHashMap = messageHashMap;
-        this.messageUserHashMap = messageUserHashMap;
-        groupHashMap = groupHashMap;
-        groupUserHashMap = groupUserHashMap;
+    public WhatsappRepository() {
+        this.userHashMap = new HashMap<>();
+        this.messageHashMap = new HashMap<>();
+        this.messageUserHashMap = new HashMap<>();
+        this.groupHashMap = new HashMap<>();
+        this.groupUserHashMap = new HashMap<>();
     }
 
     public String createUser(String name,String mobile) throws Exception{
@@ -139,7 +139,8 @@ public class WhatsappRepository {
         //If user is found in a group and it is the admin, throw "Cannot remove admin" exception
         //If user is not the admin, remove the user from the group, remove all its messages from all the databases, and update relevant attributes accordingly.
         //If user is removed successfully, return (the updated number of users in the group + the updated number of messages in group + the updated number of overall messages)
-          return 0;
+       return 0;
+
        }
 
     public String findMessage(Date start, Date end, int K) throws Exception{return "pending";}
